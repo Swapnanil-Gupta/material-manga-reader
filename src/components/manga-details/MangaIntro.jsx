@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import apiConstants from "../constants/api-constants";
+import apiConstants from "../../constants/api-constants";
 import Typography from "@material-ui/core/Typography";
 
 const useStyle = makeStyles((theme) => ({

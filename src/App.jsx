@@ -1,10 +1,10 @@
-import Navbar from "./components/Navbar";
-import AllManga from "./components/AllManga";
+import Navbar from "./components/shared/Navbar";
+import AllManga from "./components/all-manga";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import SearchManga from "./components/SearchManga";
+import SearchManga from "./components/search-manga";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import MangaDetails from "./components/MangaDetails";
+import MangaDetails from "./components/manga-details";
 import { useState } from "react";
 import { light, dark } from "./theme";
 import { useEffect } from "react";
