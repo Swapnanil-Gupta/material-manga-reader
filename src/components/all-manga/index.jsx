@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { getMangaWithCovers } from "../services/manga-service";
+import { getMangaWithCovers } from "../../services/manga-service";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import MangaGridView from "./MangaGridView";
+import MangaGridView from "../shared/MangaGridView";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -14,7 +14,6 @@ import Alert from "@material-ui/lab/Alert";
 import { useHistory, useLocation } from "react-router-dom";
 import qs from "qs";
 import Container from "@material-ui/core/Container";
-import If from "./If";
 
 const useStyle = makeStyles((theme) => ({
   title: {
@@ -154,85 +153,85 @@ function AllManga() {
         All Manga
       </Typography>
 
-      <If condition={loading}>
-        <CircularProgress color="secondary" />
-      </If>
+      {loading && <CircularProgress color="secondary" />}
 
-      <If condition={!loading && error}>
+      {!loading && error && (
         <Alert variant="outlined" severity="error">
           Unable to load manga
         </Alert>
-      </If>
+      )}
 
-      <If condition={!loading && !error && mangaList.length > 0}>
-        <Box mb={2} className={classes.filterWrapper}>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="sort-by">Sort By</InputLabel>
-            <Select
-              labelId="sort-by"
-              id="sort-by"
-              value={sortBy}
-              onChange={sortByChangeHandler}
-              label="Sort By"
-            >
-              <MenuItem value="popular">Most Popular</MenuItem>
-              <MenuItem value="updated">Recently Updated</MenuItem>
-              <MenuItem value="created">Recently Created</MenuItem>
-            </Select>
-          </FormControl>
+      {!loading && !error && mangaList.length > 0 && (
+        <>
+          <Box mb={2} className={classes.filterWrapper}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="sort-by">Sort By</InputLabel>
+              <Select
+                labelId="sort-by"
+                id="sort-by"
+                value={sortBy}
+                onChange={sortByChangeHandler}
+                label="Sort By"
+              >
+                <MenuItem value="popular">Most Popular</MenuItem>
+                <MenuItem value="updated">Recently Updated</MenuItem>
+                <MenuItem value="created">Recently Created</MenuItem>
+              </Select>
+            </FormControl>
 
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="per-page">Per Page</InputLabel>
-            <Select
-              labelId="per-page"
-              id="per-page"
-              value={perPage}
-              onChange={perPageChangeHandler}
-              label="Per Page"
-            >
-              {perPageValues.map((v) => (
-                <MenuItem key={v} value={v}>
-                  {v}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="per-page">Per Page</InputLabel>
+              <Select
+                labelId="per-page"
+                id="per-page"
+                value={perPage}
+                onChange={perPageChangeHandler}
+                label="Per Page"
+              >
+                {perPageValues.map((v) => (
+                  <MenuItem key={v} value={v}>
+                    {v}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-          <Pagination
-            variant="outlined"
-            shape="rounded"
-            className={classes.pagination}
-            size="large"
-            showFirstButton
-            showLastButton
-            count={totalPages}
-            page={currentPage}
-            onChange={(e, p) => pageChangeHandler(p)}
+            <Pagination
+              variant="outlined"
+              shape="rounded"
+              className={classes.pagination}
+              size="large"
+              showFirstButton
+              showLastButton
+              count={totalPages}
+              page={currentPage}
+              onChange={(e, p) => pageChangeHandler(p)}
+            />
+          </Box>
+
+          <MangaGridView
+            mangaList={mangaList}
+            total={total}
+            perPage={perPage}
+            currentPage={currentPage}
+            onPageChange={pageChangeHandler}
           />
-        </Box>
 
-        <MangaGridView
-          mangaList={mangaList}
-          total={total}
-          perPage={perPage}
-          currentPage={currentPage}
-          onPageChange={pageChangeHandler}
-        />
-
-        <Box my={2} display="flex">
-          <Pagination
-            variant="outlined"
-            shape="rounded"
-            className={classes.pagination}
-            size="large"
-            showFirstButton
-            showLastButton
-            count={totalPages}
-            page={currentPage}
-            onChange={(e, p) => pageChangeHandler(p)}
-          />
-        </Box>
-      </If>
+          <Box my={2} display="flex">
+            <Pagination
+              variant="outlined"
+              shape="rounded"
+              className={classes.pagination}
+              size="large"
+              showFirstButton
+              showLastButton
+              count={totalPages}
+              page={currentPage}
+              onChange={(e, p) => pageChangeHandler(p)}
+            />
+          </Box>
+        </>
+      )}
     </Container>
   );
 }

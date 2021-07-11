@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
+import { getLangByCode } from "../../services/langcode-service";
 
 const useStyle = makeStyles((theme) => ({
   info: {
@@ -27,6 +28,8 @@ function MangaInfo({ manga }) {
   const status = manga.data.attributes.status || "Unknown";
   const altTitles =
     manga.data.attributes.altTitles?.map((t) => t.en)?.join(", ") || "Unknown";
+  const originalLang =
+    getLangByCode(manga.data.attributes.originalLanguage) || "Unknown";
   const tags = manga.data.attributes.tags;
   const tagNames = [];
   if (tags && tags.length > 0) {
@@ -71,6 +74,11 @@ function MangaInfo({ manga }) {
       <Typography className={classes.info}>
         <span className={classes.infoHeader}>Status:</span>{" "}
         <span className={classes.capitalize}>{status}</span>
+      </Typography>
+
+      <Typography className={classes.info}>
+        <span className={classes.infoHeader}>Original Language:</span>{" "}
+        <span className={classes.capitalize}>{originalLang}</span>
       </Typography>
 
       <Typography className={classes.info}>

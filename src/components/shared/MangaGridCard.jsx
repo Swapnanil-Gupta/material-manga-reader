@@ -5,7 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import apiConstants from "../constants/api-constants";
+import apiConstants from "../../constants/api-constants";
 import { Link } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
