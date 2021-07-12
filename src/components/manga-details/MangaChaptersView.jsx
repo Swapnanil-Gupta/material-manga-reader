@@ -10,6 +10,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Box from "@material-ui/core/Box";
 import InputLabel from "@material-ui/core/InputLabel";
+import apiConstants from "../../constants/api-constants";
 
 const useStyle = makeStyles((theme) => ({
   w100: {
@@ -33,7 +34,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const LIMIT = 20;
+const LIMIT = apiConstants.CHAPTERS_PER_LOAD;
 
 function MangaChaptersView({ manga }) {
   const id = manga.data.id;
@@ -100,7 +101,7 @@ function MangaChaptersView({ manga }) {
       {loading && <CircularProgress color="secondary" />}
       {!loading && error && (
         <Alert severity="error" variant="outlined">
-          Unable to load manga
+          Unable to load chapters
         </Alert>
       )}
       {!loading && !error && chapters.length === 0 && (
@@ -137,7 +138,7 @@ function MangaChaptersView({ manga }) {
             onClick={loadMore}
             disabled={moreLoading || chapters.length === total}
           >
-            {moreLoading ? <CircularProgress /> : "Load more"}
+            {moreLoading ? "Loading..." : "Load more"}
           </Button>
         </>
       )}

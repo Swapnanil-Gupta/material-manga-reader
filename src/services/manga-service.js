@@ -15,12 +15,17 @@ function getManga(query) {
   return axios.get("/manga", {
     params: {
       ...query,
+      includes: ["cover_art"],
     },
   });
 }
 
 function getMangaById(id) {
-  return axios.get(`/manga/${id}`);
+  return axios.get(`/manga/${id}`, {
+    params: {
+      includes: ["cover_art", "author"],
+    },
+  });
 }
 
 function getCover(query) {
@@ -50,6 +55,15 @@ function getMangaFeedById(id, sortBy, query) {
     ...query,
   };
   return axios.get(`/manga/${id}/feed`, { params });
+}
+
+function getCoversByMangaId(id, query) {
+  return axios.get("/cover", {
+    params: {
+      manga: [id],
+      ...query,
+    },
+  });
 }
 
 async function getMangaWithCovers(query) {
@@ -112,8 +126,18 @@ async function getMangaChaptersFeed(mangaId, sortBy, query) {
   }
 }
 
+async function getMangaCovers(mangaId, query) {
+  try {
+    let resp = await getCoversByMangaId(mangaId, query);
+    return resp.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export {
   getMangaWithCovers,
   getMangaWithCoverAndAuthorById,
   getMangaChaptersFeed,
+  getMangaCovers,
 };

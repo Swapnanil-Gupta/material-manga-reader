@@ -10,10 +10,10 @@ const useStyle = makeStyles((theme) => ({
     backgroundPosition: "center center",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
+    backgroundAttachment: "fixed",
     [theme.breakpoints.up("sm")]: {
       minHeight: "20rem",
     },
-    backgroundAttachment: "fixed",
   },
   wrapper: {
     display: "flex",
@@ -33,12 +33,12 @@ const useStyle = makeStyles((theme) => ({
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     borderRadius: theme.shape.borderRadius,
+    marginBottom: theme.spacing(3),
+    boxShadow: theme.shadows[5],
     [theme.breakpoints.up("sm")]: {
       height: "25rem",
       width: "20rem",
     },
-    marginBottom: theme.spacing(3),
-    boxShadow: theme.shadows[5],
   },
   info: {
     width: "100%",

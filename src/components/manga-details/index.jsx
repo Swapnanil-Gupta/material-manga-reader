@@ -13,6 +13,7 @@ import { FaBook, FaInfo, FaPalette } from "react-icons/fa";
 import MangaInfo from "./MangaInfo";
 import Box from "@material-ui/core/Box";
 import MangaChaptersView from "./MangaChaptersView";
+import MangaCoversView from "./MangaCoversView";
 
 function MangaDetails() {
   const { mangaId } = useParams();
@@ -74,7 +75,7 @@ function MangaDetails() {
               <MangaChaptersView manga={manga} />
             </TabPanel>
             <TabPanel value={activeTab} index={2}>
-              Item Three
+              <MangaCoversView manga={manga} />
             </TabPanel>
           </Container>
         </>
