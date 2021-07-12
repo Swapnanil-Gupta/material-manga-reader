@@ -39,15 +39,15 @@ function getAuthorById(id) {
   return axios.get(`/author/${id}`);
 }
 
-function getMangaFeedById(id, query) {
+function getMangaFeedById(id, sortBy, query) {
   const params = {
-    ...query,
     translatedLanguage: ["en"],
     order: {
-      volume: "desc",
-      chapter: "desc",
-      updatedAt: "desc",
+      volume: sortBy,
+      chapter: sortBy,
+      updatedAt: sortBy,
     },
+    ...query,
   };
   return axios.get(`/manga/${id}/feed`, { params });
 }
@@ -103,9 +103,9 @@ async function getMangaWithCoverAndAuthorById(mangaId) {
   }
 }
 
-async function getMangaChaptersFeed(mangaId, query) {
+async function getMangaChaptersFeed(mangaId, sortBy, query) {
   try {
-    let resp = await getMangaFeedById(mangaId, query);
+    let resp = await getMangaFeedById(mangaId, sortBy, query);
     return resp.data;
   } catch (err) {
     throw err;

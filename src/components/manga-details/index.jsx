@@ -71,7 +71,7 @@ function MangaDetails() {
               <MangaInfo manga={manga} />
             </TabPanel>
             <TabPanel value={activeTab} index={1}>
-              <MangaChaptersView mangaId={manga.data.id} />
+              <MangaChaptersView manga={manga} />
             </TabPanel>
             <TabPanel value={activeTab} index={2}>
               Item Three
