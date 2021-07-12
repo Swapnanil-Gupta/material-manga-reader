@@ -9,10 +9,10 @@ import Container from "@material-ui/core/Container";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import TabPanel from "../shared/TabPanel";
-import { FaBook, FaInfo, FaPalette } from "react-icons/fa";
+import { FaBook, FaInfoCircle, FaPalette } from "react-icons/fa";
 import MangaInfo from "./MangaInfo";
 import Box from "@material-ui/core/Box";
-import MangaChaptersView from "./MangaChaptersView";
+import MangaChaptersView from "../shared/MangaChaptersView";
 import MangaCoversView from "./MangaCoversView";
 
 function MangaDetails() {
@@ -64,7 +64,7 @@ function MangaDetails() {
               textColor="primary"
               variant="fullWidth"
             >
-              <Tab icon={<FaInfo />} label="Info" />
+              <Tab icon={<FaInfoCircle />} label="Info" />
               <Tab icon={<FaBook />} label="Chapters" />
               <Tab icon={<FaPalette />} label="Art" />
             </Tabs>
@@ -72,10 +72,10 @@ function MangaDetails() {
               <MangaInfo manga={manga} />
             </TabPanel>
             <TabPanel value={activeTab} index={1}>
-              <MangaChaptersView manga={manga} />
+              <MangaChaptersView mangaId={manga.data.id} />
             </TabPanel>
             <TabPanel value={activeTab} index={2}>
-              <MangaCoversView manga={manga} />
+              <MangaCoversView mangaId={manga.data.id} />
             </TabPanel>
           </Container>
         </>

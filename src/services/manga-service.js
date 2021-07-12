@@ -4,6 +4,9 @@ import {
   getCoverIdsFromMangaList,
   populateMangaWithCoverFile,
   getRelationshipObj,
+  getAllChapters,
+  getNextChapter,
+  getPreviousChapter,
 } from "../utils/manga-utils";
 import qs from "qs";
 
@@ -62,6 +65,32 @@ function getCoversByMangaId(id, query) {
     params: {
       manga: [id],
       ...query,
+    },
+  });
+}
+
+function getChapterById(id) {
+  return axios.get(`/chapter/${id}`, {
+    params: {
+      includes: ["manga"],
+    },
+  });
+}
+
+function getChapterServer(chapterId) {
+  return axios.get(`/at-home/server/${chapterId}`);
+}
+
+function getMangaAggregate(id) {
+  return axios.get(`/manga/${id}/aggregate`);
+}
+
+function getChapterByNo(mangaId, chapterNo) {
+  return axios.get("/chapter", {
+    params: {
+      manga: mangaId,
+      chapter: chapterNo,
+      translatedLanguage: ["en"],
     },
   });
 }
@@ -135,9 +164,102 @@ async function getMangaCovers(mangaId, query) {
   }
 }
 
+async function getChapterWithServerAndManga(chapterId) {
+  try {
+    let resp = await Promise.all([
+      getChapterById(chapterId),
+      getChapterServer(chapterId),
+    ]);
+    let chapterResp = resp[0];
+    let chapterServerResp = resp[1];
+    if (!chapterResp || !chapterServerResp)
+      throw new Error("Chapter/Server not found");
+    let chapterData = chapterResp.data;
+    let chapterServer = chapterServerResp.data;
+    chapterData.data.attributes.server = chapterServer;
+    chapterData.data.attributes.mangaId = getRelationshipObj(
+      chapterData,
+      "manga"
+    )?.id;
+    return chapterData;
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function getPrevAndNextChapter(mangaId, chapter) {
+  try {
+    let aggregateResp = await getMangaAggregate(mangaId);
+    const chapterNo = +chapter.data.attributes.chapter;
+    const allChapters = getAllChapters(aggregateResp.data);
+
+    console.log(allChapters);
+
+    const nextChapterNo = getNextChapter(chapterNo, allChapters);
+    const prevChapterNo = getPreviousChapter(chapterNo, allChapters);
+    console.log("next -> " + nextChapterNo);
+    console.log("prev -> " + prevChapterNo);
+
+    let returnObj = { prevChapterId: null, nextChapterId: null };
+
+    let promises = [];
+    if (prevChapterNo) {
+      promises.push(getChapterByNo(mangaId, prevChapterNo));
+    }
+    if (nextChapterNo) {
+      promises.push(getChapterByNo(mangaId, nextChapterNo));
+    }
+    try {
+      let resp = await Promise.all(promises);
+
+      let prevChapterResp = null;
+      if (prevChapterNo && resp[0]) {
+        prevChapterResp = resp[0];
+      }
+
+      let nextChapterResp = null;
+      if (nextChapterNo) {
+        if (prevChapterResp && resp[1]) {
+          nextChapterResp = resp[1];
+        }
+        if (!prevChapterResp && resp[0]) {
+          nextChapterResp = resp[0];
+        }
+      }
+
+      console.log("prevChapterResp");
+      console.log(prevChapterResp);
+      console.log("nextChapterResp");
+      console.log(nextChapterResp);
+
+      if (prevChapterResp) {
+        let results = prevChapterResp.data.results;
+        if (results.length > 0) {
+          returnObj.prevChapterId = results[0].data.id;
+        }
+      }
+
+      if (nextChapterResp) {
+        let results = nextChapterResp.data.results;
+        if (results.length > 0) {
+          returnObj.nextChapterId = results[0].data.id;
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    console.log(returnObj);
+    return returnObj;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export {
   getMangaWithCovers,
   getMangaWithCoverAndAuthorById,
   getMangaChaptersFeed,
   getMangaCovers,
+  getChapterWithServerAndManga,
+  getPrevAndNextChapter,
 };

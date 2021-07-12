@@ -23,8 +23,45 @@ function populateMangaWithCoverFile(mangaList, coversList) {
   }
 }
 
+function getAllChapters(resp) {
+  let allChapters = [];
+  let volumes = resp.volumes;
+  for (let vol in volumes) {
+    let volume = volumes[vol];
+    let chapters = volume.chapters;
+    for (let chap in chapters) {
+      let chapter = chapters[chap];
+      if (chapter.chapter) {
+        let chapterNo = +chapter.chapter;
+        if (chapterNo && !allChapters.includes(chapterNo)) {
+          allChapters.push(chapterNo);
+        }
+      }
+    }
+  }
+  allChapters.sort((a, b) => a - b);
+  return allChapters;
+}
+
+function getNextChapter(chapter, allChapters) {
+  let index = allChapters.findIndex((c) => c === chapter);
+  if (index < 0 || index === allChapters.length - 1) {
+    return null;
+  } else return allChapters[index + 1];
+}
+
+function getPreviousChapter(chapter, allChapters) {
+  let index = allChapters.findIndex((c) => c === chapter);
+  if (index <= 0) {
+    return null;
+  } else return allChapters[index - 1];
+}
+
 export {
   getCoverIdsFromMangaList,
   getRelationshipObj,
   populateMangaWithCoverFile,
+  getAllChapters,
+  getNextChapter,
+  getPreviousChapter,
 };
