@@ -40,7 +40,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-function MangaChapterCard({ chapter }) {
+function MangaChapterCard({ mangaId, chapter }) {
   const id = chapter.data.id;
   const title = chapter.data.attributes.title || "Unknown title";
   const volume = chapter.data.attributes.volume || "Unknown";
@@ -51,7 +51,7 @@ function MangaChapterCard({ chapter }) {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea component={Link} to={`/chapter/${id}`}>
+      <CardActionArea component={Link} to={`/manga/${mangaId}/${id}`}>
         <CardContent className={classes.wrapper}>
           <div>
             <Typography className={classes.title}>{title}</Typography>

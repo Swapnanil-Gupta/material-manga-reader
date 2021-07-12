@@ -36,8 +36,7 @@ const useStyle = makeStyles((theme) => ({
 
 const LIMIT = apiConstants.CHAPTERS_PER_LOAD;
 
-function MangaChaptersView({ manga }) {
-  const id = manga.data.id;
+function MangaChaptersView({ mangaId }) {
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -52,7 +51,7 @@ function MangaChaptersView({ manga }) {
     (async () => {
       setLoading(true);
       try {
-        let chapterData = await getMangaChaptersFeed(id, sortBy, {
+        let chapterData = await getMangaChaptersFeed(mangaId, sortBy, {
           offset: 0,
           limit: LIMIT,
         });
@@ -65,14 +64,14 @@ function MangaChaptersView({ manga }) {
         setLoading(false);
       }
     })();
-  }, [id, sortBy]);
+  }, [mangaId, sortBy]);
 
   useEffect(() => {
     if (offset === 0) return;
     (async () => {
       setMoreLoading(true);
       try {
-        let chapterData = await getMangaChaptersFeed(id, sortBy, {
+        let chapterData = await getMangaChaptersFeed(mangaId, sortBy, {
           offset,
           limit: LIMIT,
         });
@@ -85,7 +84,7 @@ function MangaChaptersView({ manga }) {
         setMoreLoading(false);
       }
     })();
-  }, [id, sortBy, offset]);
+  }, [mangaId, sortBy, offset]);
 
   function loadMore() {
     setOffset((o) => o + LIMIT);
@@ -128,7 +127,7 @@ function MangaChaptersView({ manga }) {
           </Box>
 
           {chapters.map((c) => (
-            <MangaChapterCard key={c.data.id} chapter={c} />
+            <MangaChapterCard key={c.data.id} mangaId={mangaId} chapter={c} />
           ))}
 
           <Button

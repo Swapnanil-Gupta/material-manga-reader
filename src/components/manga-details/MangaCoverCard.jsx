@@ -18,8 +18,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-function MangaCoverCard({ manga, cover }) {
-  const mangaId = manga.data.id;
+function MangaCoverCard({ mangaId, cover }) {
   const coverFileName = cover.data.attributes.fileName;
   const classes = useStyle();
 

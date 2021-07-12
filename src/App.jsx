@@ -4,10 +4,11 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import SearchManga from "./components/search-manga";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import MangaDetails from "./components/manga-details";
 import { useState } from "react";
 import { light, dark } from "./theme";
 import { useEffect } from "react";
+import MangaDetails from "./components/manga-details";
+import ReadChapter from "./components/read-chapter";
 
 function App() {
   const [theme, setTheme] = useState(
@@ -33,7 +34,8 @@ function App() {
       <BrowserRouter>
         <Navbar toggleTheme={toggleTheme} />
         <Switch>
-          <Route path="/manga/:mangaId" component={MangaDetails} />
+          <Route path={`/manga/:mangaId/:chapterId`} component={ReadChapter} />
+          <Route path={`/manga/:mangaId`} component={MangaDetails} />
           <Route path="/search" component={SearchManga} />
           <Route path="/all" component={AllManga} />
           <Route path="/">

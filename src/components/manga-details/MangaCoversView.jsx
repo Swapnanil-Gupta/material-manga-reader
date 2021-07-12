@@ -17,8 +17,7 @@ const useStyle = makeStyles((theme) => ({
 
 const LIMIT = apiConstants.COVERS_PER_LOAD;
 
-function MangaCoversView({ manga }) {
-  const id = manga.data.id;
+function MangaCoversView({ mangaId }) {
   const [covers, setCovers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -32,7 +31,7 @@ function MangaCoversView({ manga }) {
     (async () => {
       try {
         setLoading(true);
-        let coversData = await getMangaCovers(id, {
+        let coversData = await getMangaCovers(mangaId, {
           offset: 0,
           limit: LIMIT,
         });
@@ -45,14 +44,14 @@ function MangaCoversView({ manga }) {
         setLoading(false);
       }
     })();
-  }, [id]);
+  }, [mangaId]);
 
   useEffect(() => {
     if (offset === 0) return;
     (async () => {
       try {
         setMoreLoading(true);
-        let coversData = await getMangaCovers(id, {
+        let coversData = await getMangaCovers(mangaId, {
           offset,
           limit: LIMIT,
         });
@@ -65,7 +64,7 @@ function MangaCoversView({ manga }) {
         setMoreLoading(false);
       }
     })();
-  }, [id, offset]);
+  }, [mangaId, offset]);
 
   function loadMore() {
     setOffset((o) => o + LIMIT);
@@ -86,7 +85,7 @@ function MangaCoversView({ manga }) {
       )}
       {!loading && !error && covers.length > 0 && (
         <>
-          <MangaCoversGrid manga={manga} covers={covers} />
+          <MangaCoversGrid mangaId={mangaId} covers={covers} />
 
           <Button
             variant="outlined"
