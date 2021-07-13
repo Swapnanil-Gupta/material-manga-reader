@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import LazyLoad from "react-lazyload";
 
 const useStyle = makeStyles((theme) => ({
   chapterImg: {
@@ -15,18 +16,21 @@ function ChapterImages({ chapter }) {
   const classes = useStyle();
 
   function getChapterImgSrc(imgFile) {
-    return `${server}/data/${hash}/${imgFile}`;
+    let imgUrl = `${server}/data/${hash}/${imgFile}`;
+    console.log(imgUrl);
+    return imgUrl;
   }
 
   return (
     <>
       {images.map((img) => (
-        <img
-          className={classes.chapterImg}
-          key={img}
-          src={getChapterImgSrc(img)}
-          alt={img}
-        />
+        <LazyLoad key={img} height={200} once>
+          <img
+            className={classes.chapterImg}
+            src={getChapterImgSrc(img)}
+            alt={img}
+          />
+        </LazyLoad>
       ))}
     </>
   );
