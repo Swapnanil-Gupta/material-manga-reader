@@ -53,7 +53,7 @@ function ReadChapter() {
       }
       setLoading(false);
     })();
-  }, [chapterId]);
+  }, [mangaId, chapterId]);
 
   function gotoPrevChap() {
     history.push(`/manga/${mangaId}/${prevChapterId}`);
